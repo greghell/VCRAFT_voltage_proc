@@ -22,7 +22,7 @@ for fname in fnames:
     ffreqs = ffreqs.split(",")
     ffreqs = map(int, ffreqs)
     for it in range(len(ffreqs)):
-        mapfreqs.append([fname,ffreqs[it]])
+        mapfreqs.append([fname,ffreqs[it],it])
         allfreqs.append(ffreqs[it])
     fh.close()
 
@@ -39,3 +39,5 @@ plt.plot(sorted(allfreqs))
 plt.title("frequencies sorted")
 plt.ylabel("frequency [MHz]")
 plt.show()
+
+print(mapfreqs)
