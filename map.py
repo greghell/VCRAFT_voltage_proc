@@ -1,7 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jan 10 15:31:49 2019
+
+@author: greg
+"""
+
 import glob
 import os
 import matplotlib.pyplot as plt
 import sys
+import operator
 
 if len(sys.argv) < 2:
     print("indicate path to directory as argument")
@@ -39,5 +47,7 @@ plt.plot(sorted(allfreqs))
 plt.title("frequencies sorted")
 plt.ylabel("frequency [MHz]")
 plt.show()
+
+mapfreqs = sorted(mapfreqs, key=operator.itemgetter(1))
 
 print(mapfreqs)
