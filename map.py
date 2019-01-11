@@ -80,7 +80,7 @@ for k in range(len(allfreqs)):
             sigimag[kk] = sigimag[kk] -16
     data[k,:] = sigreal + 1j*sigimag
 
-plt.figure()
-for k in range(len(allfreqs)):
-    plt.plot(data[k,:].real + k)
-plt.show()
+# plt.figure()
+# for k in range(len(allfreqs)):
+#     plt.plot(data[k,:].real + k)
+# plt.show()
