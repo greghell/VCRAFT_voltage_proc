@@ -31,20 +31,7 @@ for fname in fnames:
 print("minimum frequency : " + str(min(allfreqs)))
 print("maximum frequency : " + str(max(allfreqs)))
 
-#plt.figure()
-#plt.subplot(121)
-#plt.title("frequencies as read in consecutive VCRAFT files")
-#plt.plot(allfreqs)
-#plt.ylabel("frequency [MHz]")
-#plt.subplot(122)
-#plt.plot(sorted(allfreqs))
-#plt.title("frequencies sorted")
-#plt.ylabel("frequency [MHz]")
-#plt.show()
-
 mapfreqs = sorted(mapfreqs, key=operator.itemgetter(1))
-
-print(mapfreqs)
 
 fh = open(mapfreqs[0][0], "r")
 head_beg = str(fh.read(4096))
@@ -65,22 +52,17 @@ else:
     nSamchosen = int(sys.argv[2])
 
 data = np.zeros((len(allfreqs),nSamchosen), dtype=complex)
+lut = np.array([0.,1.,2.,3.,4.,5.,6.,7.,-8.,-7.,-6.,-5.,-4.,-3.,-2.,-1.])
 print("size of data array : "+str(data.shape))
 for k in range(len(allfreqs)):
+    print("processing channel #"+str(k))
     fh = open(mapfreqs[k][0], "rb")
     fh.seek(hdrsize+mapfreqs[k][2]*nSam, 0)
     sams = np.fromfile(fh, dtype='int8',count=nSamchosen)
     fh.close()
-    sigreal = np.bitwise_and(sams, 0x0f)
-    sigimag = np.bitwise_and(sams >> 4, 0x0f)
-    for kk in range(len(sigreal)):
-        if sigreal[kk] > 7:
-            sigreal[kk] = sigreal[kk] -16
-        if sigimag[kk] > 7:
-            sigimag[kk] = sigimag[kk] -16
-    data[k,:] = sigreal + 1j*sigimag
-
-# plt.figure()
-# for k in range(len(allfreqs)):
-#     plt.plot(data[k,:].real + k)
-# plt.show()
+    sigreal = lut[np.array(np.bitwise_and(sams, 0x0f))]
+    sigimag = lut[np.array(np.bitwise_and(sams >> 4, 0x0f))]
+    sig = sigreal + 1j*sigimag
+    if int(sys.argv[3]):
+        sig = (sig - np.mean(sig)) / np.std(sig)
+    data[k,:] = sig
