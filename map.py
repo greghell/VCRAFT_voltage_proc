@@ -64,5 +64,5 @@ for k in range(len(allfreqs)):
     sigimag = lut[np.array(np.bitwise_and(sams >> 4, 0x0f))]
     sig = sigreal + 1j*sigimag
     if int(sys.argv[3]):
-        sig = (sig - np.mean(sig)) / np.std(sig)
+        sig = (sig - np.mean(sig)) / np.var(sig)
     data[k,:] = sig
